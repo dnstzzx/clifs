@@ -15,7 +15,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: download data
+    - name: Download data
       run: bash ./setup.sh
-    - name: Build the Docker image
+      
+    - name: Build Docker images
       run: docker-compose build
+      
+    - name: Save Docker images
+      run: |
+        docker save -o clifs_web.tar clifs_web:latest
+        docker save -o clifs_search-engine.tar clifs_search-engine:latest
+    
+    - name: Upload clifs_web
+      uses: actions/upload-artifact@v3
+      with: 
+        name: clifs_web.tar
+        path: clifs_web.tar
+    
+    - name: Upload clifs_search-engine
+      uses: actions/upload-artifact@v3
+      with: 
+        name: clifs_search-engine.tar
+        path: clifs_search-engine.tar
+        
+      
